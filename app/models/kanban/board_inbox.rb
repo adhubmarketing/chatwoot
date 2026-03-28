@@ -17,6 +17,8 @@
 #  index_kanban_board_inboxes_on_inbox_id           (inbox_id)
 #
 class Kanban::BoardInbox < ApplicationRecord
+  self.table_name = 'kanban_board_inboxes'
+
   belongs_to :account
   belongs_to :board, class_name: 'Kanban::Board'
   belongs_to :inbox

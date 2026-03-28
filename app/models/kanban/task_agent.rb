@@ -17,6 +17,8 @@
 #  index_kanban_task_agents_on_user_id         (user_id)
 #
 class Kanban::TaskAgent < ApplicationRecord
+  self.table_name = 'kanban_task_agents'
+
   belongs_to :account
   belongs_to :task, class_name: 'Kanban::Task'
   belongs_to :user

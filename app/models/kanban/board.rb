@@ -17,6 +17,8 @@
 #  index_kanban_boards_on_account_id_and_name  (account_id, name) UNIQUE
 #
 class Kanban::Board < ApplicationRecord
+  self.table_name = 'kanban_boards'
+
   include AccountCacheRevalidator
 
   belongs_to :account
@@ -28,7 +30,7 @@ class Kanban::Board < ApplicationRecord
   has_many :assigned_inboxes, through: :board_inboxes, source: :inbox
 
   validates :name,
-            presence: { message: I18n.t('errors.validations.presence') },
+            presence: true,
             uniqueness: { scope: :account_id }
 
   before_validation do

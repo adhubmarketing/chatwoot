@@ -17,6 +17,8 @@
 #  index_kanban_board_agents_on_user_id           (user_id)
 #
 class Kanban::BoardAgent < ApplicationRecord
+  self.table_name = 'kanban_board_agents'
+
   belongs_to :account
   belongs_to :board, class_name: 'Kanban::Board'
   belongs_to :user

@@ -14,6 +14,8 @@
 #  index_kanban_prefs_on_account_and_user (account_id, user_id) UNIQUE
 #
 class Kanban::AccountUserPreference < ApplicationRecord
+  self.table_name = 'kanban_account_user_preferences'
+
   belongs_to :account
   belongs_to :user
 

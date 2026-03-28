@@ -20,12 +20,14 @@
 #  index_kanban_board_steps_on_board_id_and_name (board_id, name) UNIQUE
 #
 class Kanban::BoardStep < ApplicationRecord
+  self.table_name = 'kanban_board_steps'
+
   belongs_to :account
   belongs_to :board, class_name: 'Kanban::Board'
   has_many :tasks, class_name: 'Kanban::Task', foreign_key: :step_id, dependent: :nullify
 
   validates :name,
-            presence: { message: I18n.t('errors.validations.presence') },
+            presence: true,
             uniqueness: { scope: :board_id }
   validates :color, format: { with: /\A#[0-9A-Fa-f]{6}\z/, message: 'must be a valid hex color (e.g., #1f93ff)' }
 

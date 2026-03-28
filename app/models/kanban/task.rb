@@ -25,6 +25,8 @@
 #  index_kanban_tasks_on_priority                  (priority)
 #
 class Kanban::Task < ApplicationRecord
+  self.table_name = 'kanban_tasks'
+
   include Labelable
 
   belongs_to :account
@@ -43,7 +45,7 @@ class Kanban::Task < ApplicationRecord
 
   enum priority: { low: 0, medium: 1, high: 2, urgent: 3 }
 
-  validates :title, presence: { message: I18n.t('errors.validations.presence') }
+  validates :title, presence: true
   validates :description, length: { maximum: 5000 }
 
   scope :overdue, -> { where('due_date < ?', Date.today) }
@@ -61,18 +63,13 @@ class Kanban::Task < ApplicationRecord
   def move_to_step(new_step_id, insert_before_task_id: nil)
     transaction do
       old_step_id = step_id
-      self.step_id = new_step_id
-      self.step_changed_at = Time.current
-
-      # Recalculate position using the TaskPositionManager
-      service = Kanban::TaskPositionManager.new
-      service.insert_task(self, new_step_id, before_task_id: insert_before_task_id)
+      update(step_id: new_step_id, step_changed_at: Time.current)
 
       # Update counter caches
       Kanban::BoardStep.reset_counters(old_step_id, :tasks) if old_step_id
       Kanban::BoardStep.reset_counters(new_step_id, :tasks) if new_step_id
 
-      save
+      true
     end
   end
 
@@ -124,21 +121,22 @@ class Kanban::Task < ApplicationRecord
   end
 
   def create_audit_event
-    return unless saved_changes.any?
+    changes_to_save = previous_changes.presence || saved_changes
+    return unless changes_to_save.any?
 
-    action = if saved_change_to_id?
+    action = if changes_to_save.key?('id')
                'created'
-             elsif saved_change_to_step_id?
+             elsif changes_to_save.key?('step_id')
                'moved'
              else
                'updated'
              end
 
-    audit_events.create(
+    audit_events.create!(
       account_id: account_id,
       action: action,
       metadata: {
-        changes: saved_changes.except('updated_at'),
+        changes: changes_to_save.except('updated_at'),
         changed_at: Time.current
       },
       performed_by_id: Current.user&.id

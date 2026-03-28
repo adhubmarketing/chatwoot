@@ -18,9 +18,11 @@
 #  index_kanban_audit_events_on_performed_by_id      (performed_by_id)
 #
 class Kanban::AuditEvent < ApplicationRecord
+  self.table_name = 'kanban_audit_events'
+
   belongs_to :account
   belongs_to :task, class_name: 'Kanban::Task'
-  belongs_to :performed_by, class_name: 'User'
+  belongs_to :performed_by, class_name: 'User', optional: true
 
   validates :action, presence: true
 

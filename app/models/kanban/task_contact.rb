@@ -17,6 +17,8 @@
 #  index_kanban_task_contacts_on_contact_id           (contact_id)
 #
 class Kanban::TaskContact < ApplicationRecord
+  self.table_name = 'kanban_task_contacts'
+
   belongs_to :account
   belongs_to :task, class_name: 'Kanban::Task'
   belongs_to :contact
