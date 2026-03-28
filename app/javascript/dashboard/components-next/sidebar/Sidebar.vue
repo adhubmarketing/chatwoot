@@ -160,6 +160,7 @@ useEventListener(document, 'touchend', onResizeEnd);
 const inboxes = useMapGetter('inboxes/getInboxes');
 const labels = useMapGetter('labels/getLabelsOnSidebar');
 const teams = useMapGetter('teams/getMyTeams');
+const kanbanBoards = useMapGetter('kanbanBoards/getFavoriteBoards');
 const contactCustomViews = useMapGetter('customViews/getContactCustomViews');
 const conversationCustomViews = useMapGetter(
   'customViews/getConversationCustomViews'
@@ -170,6 +171,7 @@ onMounted(() => {
   store.dispatch('inboxes/get');
   store.dispatch('notifications/unReadCount');
   store.dispatch('teams/get');
+  store.dispatch('kanbanBoards/getAll');
   store.dispatch('attributes/get');
   store.dispatch('customViews/get', 'conversation');
   store.dispatch('customViews/get', 'contact');
@@ -384,6 +386,26 @@ const menuItems = computed(() => {
             navigationPath: 'captain_assistants_settings_index',
           }),
         },
+      ],
+    },
+    {
+      name: 'Kanban',
+      label: t('KANBAN.HEADER'),
+      icon: 'i-lucide-kanban-square',
+      activeOn: ['kanban_overview', 'kanban_board_view'],
+      children: [
+        {
+          name: 'Overview',
+          label: t('KANBAN.OVERVIEW'),
+          activeOn: ['kanban_overview'],
+          to: accountScopedRoute('kanban_overview'),
+        },
+        ...kanbanBoards.value.map(board => ({
+          name: `${board.name}-${board.id}`,
+          label: board.name,
+          to: accountScopedRoute('kanban_board_view', { boardId: board.id }),
+          activeOn: ['kanban_board_view'],
+        })),
       ],
     },
     {
