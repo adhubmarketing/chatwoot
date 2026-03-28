@@ -1,0 +1,145 @@
+{
+  "KANBAN": {
+    "HEADER": "Kanban",
+    "OVERVIEW": "Overview",
+    "BOARDS": "Boards",
+    "CREATE_BOARD": "Create Board",
+    "EDIT_BOARD": "Edit Board",
+    "DELETE_BOARD": "Delete Board",
+    "BOARD_NAME": "Board Name",
+    "BOARD_DESCRIPTION": "Board Description",
+    "NO_BOARDS": "No boards found. Create your first board to get started.",
+    "ADD_BOARD": "Add Board",
+    "BOARD_SETTINGS": "Board Settings",
+    "FAVORITE": "Favorite",
+    "UNFAVORITE": "Unfavorite",
+    "TOTAL_TASKS": "Total Tasks",
+    "STEPS": {
+      "TITLE": "Steps",
+      "ADD_STEP": "Add Step",
+      "EDIT_STEP": "Edit Step",
+      "DELETE_STEP": "Delete Step",
+      "STEP_NAME": "Step Name",
+      "STEP_DESCRIPTION": "Step Description",
+      "STEP_COLOR": "Color",
+      "CANCELLED": "Lost/Archived",
+      "MARK_AS_CANCELLED": "Mark as Lost/Archived",
+      "REORDER": "Reorder Steps",
+      "NO_STEPS": "No steps in this board. Add your first step to organize tasks."
+    },
+    "TASKS": {
+      "TITLE": "Tasks",
+      "ADD_TASK": "Add Task",
+      "EDIT_TASK": "Edit Task",
+      "DELETE_TASK": "Delete Task",
+      "TASK_TITLE": "Task Title",
+      "TASK_DESCRIPTION": "Description",
+      "PRIORITY": "Priority",
+      "POSITION": "Position",
+      "START_DATE": "Start Date",
+      "DUE_DATE": "Due Date",
+      "OVERDUE": "Overdue",
+      "NO_TASKS": "No tasks in this step.",
+      "MOVE_TASK": "Move Task",
+      "ASSIGN_AGENTS": "Assign Agents",
+      "ADD_CONTACTS": "Add Contacts",
+      "LINK_CONVERSATIONS": "Link Conversations",
+      "LABELS": "Labels",
+      "AUDIT_TRAIL": "History",
+      "CREATED": "Created",
+      "UPDATED": "Updated",
+      "MOVED": "Moved",
+      "CHARACTER_COUNT": "{count} / 5000 characters"
+    },
+    "PRIORITY": {
+      "LOW": "Low",
+      "MEDIUM": "Medium",
+      "HIGH": "High",
+      "URGENT": "Urgent"
+    },
+    "FILTERS": {
+      "TITLE": "Filters",
+      "ALL": "All",
+      "BY_AGENT": "By Agent",
+      "BY_INBOX": "By Inbox",
+      "BY_PRIORITY": "By Priority",
+      "BY_DUE_DATE": "By Due Date",
+      "CLEAR_FILTERS": "Clear Filters"
+    },
+    "SETTINGS": {
+      "TITLE": "Kanban Settings",
+      "BASIC_INFO": "Basic Info",
+      "STEPS_TAB": "Steps",
+      "AGENTS_TAB": "Agents",
+      "INBOXES_TAB": "Inboxes",
+      "AUTOMATION_TAB": "Automation",
+      "ASSIGNED_AGENTS": "Assigned Agents",
+      "NO_AGENTS": "No agents assigned to this board.",
+      "ASSIGNED_INBOXES": "Assigned Inboxes",
+      "NO_INBOXES": "No inboxes assigned to this board.",
+      "AUTOMATION": {
+        "SYNC_TASK_AND_CONVERSATION_AGENTS": "Sync task and conversation agents",
+        "AUTO_ASSIGN_TASK_TO_AGENT": "Auto-assign task to agent when created",
+        "AUTO_CREATE_TASK_FOR_CONVERSATION": "Auto-create task for new conversations",
+        "AUTO_RESOLVE_CONVERSATION_ON_TASK_END": "Auto-resolve conversation when task ends",
+        "AUTO_COMPLETE_TASK_ON_CONVERSATION_RESOLVE": "Auto-complete task when conversation resolves"
+      }
+    },
+    "TEMPLATES": {
+      "TITLE": "Choose a Template",
+      "EMPTY": "Empty Board",
+      "EMPTY_DESCRIPTION": "Start with a blank board",
+      "SALES": "Sales Pipeline",
+      "SALES_DESCRIPTION": "Lead → Qualified → Proposal → Negotiation → Won/Lost",
+      "SUPPORT": "Support Board",
+      "SUPPORT_DESCRIPTION": "New → In Progress → Waiting → Resolved",
+      "RECRUITMENT": "Recruitment",
+      "RECRUITMENT_DESCRIPTION": "Applied → Screening → Interview → Offer → Hired/Rejected"
+    },
+    "CONVERSATIONS": {
+      "TITLE": "Conversations",
+      "LINKED_CONVERSATIONS": "Linked Conversations",
+      "NO_CONVERSATIONS": "No conversations linked to this task.",
+      "SEARCH_CONVERSATIONS": "Search conversations..."
+    },
+    "CONTACTS": {
+      "TITLE": "Contacts",
+      "LINKED_CONTACTS": "Linked Contacts",
+      "NO_CONTACTS": "No contacts linked to this task.",
+      "SEARCH_CONTACTS": "Search contacts..."
+    },
+    "SORTING": {
+      "SORT_BY": "Sort By",
+      "POSITION": "Position",
+      "PRIORITY": "Priority",
+      "DUE_DATE": "Due Date",
+      "CREATED_AT": "Created Date",
+      "UPDATED_AT": "Updated Date",
+      "ASCENDING": "Ascending",
+      "DESCENDING": "Descending"
+    },
+    "MESSAGES": {
+      "BOARD_CREATED": "Board created successfully",
+      "BOARD_UPDATED": "Board updated successfully",
+      "BOARD_DELETED": "Board deleted successfully",
+      "STEP_CREATED": "Step created successfully",
+      "STEP_UPDATED": "Step updated successfully",
+      "STEP_DELETED": "Step deleted successfully",
+      "TASK_CREATED": "Task created successfully",
+      "TASK_UPDATED": "Task updated successfully",
+      "TASK_DELETED": "Task deleted successfully",
+      "TASK_MOVED": "Task moved successfully",
+      "FAVORITED": "Board added to favorites",
+      "UNFAVORITED": "Board removed from favorites",
+      "AGENTS_UPDATED": "Agents updated successfully",
+      "INBOXES_UPDATED": "Inboxes updated successfully",
+      "PREFERENCES_UPDATED": "Preferences updated successfully",
+      "ERROR": "An error occurred. Please try again."
+    },
+    "CONFIRM": {
+      "DELETE_BOARD": "Are you sure you want to delete this board? All tasks will be deleted.",
+      "DELETE_STEP": "Are you sure you want to delete this step? Tasks in this step will become uncategorized.",
+      "DELETE_TASK": "Are you sure you want to delete this task? This action cannot be undone."
+    }
+  }
+}
