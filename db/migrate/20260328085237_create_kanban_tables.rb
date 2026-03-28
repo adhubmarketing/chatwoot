@@ -11,7 +11,7 @@ class CreateKanbanTables < ActiveRecord::Migration[7.1]
       t.timestamps
     end
 
-    add_index :kanban_boards, [:account_id, :name], unique: true
+    add_index :kanban_boards, [:account_id, :name], unique: true, if_not_exists: true
 
     # Kanban Board Steps - columns in the board
     create_table :kanban_board_steps do |t|
@@ -26,7 +26,7 @@ class CreateKanbanTables < ActiveRecord::Migration[7.1]
       t.timestamps
     end
 
-    add_index :kanban_board_steps, [:board_id, :name], unique: true
+    add_index :kanban_board_steps, [:board_id, :name], unique: true, if_not_exists: true
 
     # Kanban Tasks - individual tasks
     create_table :kanban_tasks do |t|
@@ -45,10 +45,10 @@ class CreateKanbanTables < ActiveRecord::Migration[7.1]
       t.timestamps
     end
 
-    add_index :kanban_tasks, [:account_id]
-    add_index :kanban_tasks, [:board_id, :step_id, :position]
-    add_index :kanban_tasks, [:due_date]
-    add_index :kanban_tasks, [:priority]
+    add_index :kanban_tasks, [:account_id], if_not_exists: true
+    add_index :kanban_tasks, [:board_id, :step_id, :position], if_not_exists: true
+    add_index :kanban_tasks, [:due_date], if_not_exists: true
+    add_index :kanban_tasks, [:priority], if_not_exists: true
 
     # Join table: Kanban Board <-> Agents
     create_table :kanban_board_agents do |t|
@@ -59,7 +59,7 @@ class CreateKanbanTables < ActiveRecord::Migration[7.1]
       t.timestamps
     end
 
-    add_index :kanban_board_agents, [:board_id, :user_id], unique: true
+    add_index :kanban_board_agents, [:board_id, :user_id], unique: true, if_not_exists: true
 
     # Join table: Kanban Board <-> Inboxes
     create_table :kanban_board_inboxes do |t|
@@ -70,7 +70,7 @@ class CreateKanbanTables < ActiveRecord::Migration[7.1]
       t.timestamps
     end
 
-    add_index :kanban_board_inboxes, [:board_id, :inbox_id], unique: true
+    add_index :kanban_board_inboxes, [:board_id, :inbox_id], unique: true, if_not_exists: true
 
     # Join table: Kanban Task <-> Agents
     create_table :kanban_task_agents do |t|
@@ -81,7 +81,7 @@ class CreateKanbanTables < ActiveRecord::Migration[7.1]
       t.timestamps
     end
 
-    add_index :kanban_task_agents, [:task_id, :user_id], unique: true
+    add_index :kanban_task_agents, [:task_id, :user_id], unique: true, if_not_exists: true
 
     # Join table: Kanban Task <-> Contacts
     create_table :kanban_task_contacts do |t|
@@ -92,7 +92,7 @@ class CreateKanbanTables < ActiveRecord::Migration[7.1]
       t.timestamps
     end
 
-    add_index :kanban_task_contacts, [:task_id, :contact_id], unique: true
+    add_index :kanban_task_contacts, [:task_id, :contact_id], unique: true, if_not_exists: true
 
     # Kanban Audit Events - change history
     create_table :kanban_audit_events do |t|
@@ -105,8 +105,8 @@ class CreateKanbanTables < ActiveRecord::Migration[7.1]
       t.timestamps
     end
 
-    add_index :kanban_audit_events, [:task_id, :created_at]
-    add_index :kanban_audit_events, [:account_id, :created_at]
+    add_index :kanban_audit_events, [:task_id, :created_at], if_not_exists: true
+    add_index :kanban_audit_events, [:account_id, :created_at], if_not_exists: true
 
     # Kanban Account User Preferences - user-specific settings
     create_table :kanban_account_user_preferences do |t|
@@ -117,7 +117,7 @@ class CreateKanbanTables < ActiveRecord::Migration[7.1]
       t.timestamps
     end
 
-    add_index :kanban_account_user_preferences, [:account_id, :user_id], unique: true, name: 'index_kanban_prefs_on_account_and_user'
+    add_index :kanban_account_user_preferences, [:account_id, :user_id], unique: true, name: 'index_kanban_prefs_on_account_and_user', if_not_exists: true
 
     # Add kanban_task_id to conversations
     add_reference :conversations, :kanban_task, foreign_key: { to_table: :kanban_tasks }, index: true
