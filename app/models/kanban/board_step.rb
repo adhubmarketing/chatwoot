@@ -3,21 +3,25 @@
 # Table name: kanban_board_steps
 #
 #  id          :bigint           not null, primary key
-#  account_id  :bigint           not null
-#  board_id    :bigint           not null
-#  name        :string           not null
+#  cancelled   :boolean          default(FALSE), not null
+#  color       :string           default("#1f93ff"), not null
 #  description :text
-#  color       :string           not null, default: '#1f93ff'
+#  name        :string           not null
 #  tasks_count :integer          default(0), not null
-#  cancelled   :boolean          default(false), not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  account_id  :bigint           not null
+#  board_id    :bigint           not null
 #
 # Indexes
 #
-#  index_kanban_board_steps_on_account_id       (account_id)
-#  index_kanban_board_steps_on_board_id         (board_id)
-#  index_kanban_board_steps_on_board_id_and_name (board_id, name) UNIQUE
+#  index_kanban_board_steps_on_account_id         (account_id)
+#  index_kanban_board_steps_on_board_id           (board_id)
+#  index_kanban_board_steps_on_board_id_and_name  (board_id,name) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (board_id => kanban_boards.id)
 #
 class Kanban::BoardStep < ApplicationRecord
   self.table_name = 'kanban_board_steps'

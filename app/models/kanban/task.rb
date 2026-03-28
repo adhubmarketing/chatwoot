@@ -2,27 +2,34 @@
 #
 # Table name: kanban_tasks
 #
-#  id               :bigint           not null, primary key
-#  account_id       :bigint           not null
-#  board_id         :bigint           not null
-#  step_id          :bigint
-#  title            :string           not null
-#  description      :text             (max 5000 characters)
-#  priority         :integer          default(0), not null
-#  position         :integer          not null
-#  start_date       :date
-#  due_date         :date
+#  id                :bigint           not null, primary key
 #  cached_label_list :string
-#  step_changed_at  :datetime
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
+#  description       :text
+#  due_date          :date
+#  position          :integer          not null
+#  priority          :integer          default("low"), not null
+#  start_date        :date
+#  step_changed_at   :datetime
+#  title             :string           not null
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  account_id        :bigint           not null
+#  board_id          :bigint           not null
+#  step_id           :bigint
 #
 # Indexes
 #
-#  index_kanban_tasks_on_account_id                (account_id)
-#  index_kanban_tasks_on_board_id_step_id_position (board_id, step_id, position)
-#  index_kanban_tasks_on_due_date                  (due_date)
-#  index_kanban_tasks_on_priority                  (priority)
+#  index_kanban_tasks_on_account_id                         (account_id)
+#  index_kanban_tasks_on_board_id                           (board_id)
+#  index_kanban_tasks_on_board_id_and_step_id_and_position  (board_id,step_id,position)
+#  index_kanban_tasks_on_due_date                           (due_date)
+#  index_kanban_tasks_on_priority                           (priority)
+#  index_kanban_tasks_on_step_id                            (step_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (board_id => kanban_boards.id)
+#  fk_rails_...  (step_id => kanban_board_steps.id)
 #
 class Kanban::Task < ApplicationRecord
   self.table_name = 'kanban_tasks'

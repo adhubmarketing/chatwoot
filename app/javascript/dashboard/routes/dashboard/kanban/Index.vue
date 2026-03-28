@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
-import { useI18n } from 'dashboard/composables/useI18n';
+import { useI18n } from 'vue-i18n';
 import BoardCard from './components/BoardCard.vue';
 import CreateBoardModal from './components/CreateBoardModal.vue';
 

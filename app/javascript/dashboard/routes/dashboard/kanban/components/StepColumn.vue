@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useStore } from 'vuex';
-import { useI18n } from 'dashboard/composables/useI18n';
+import { useI18n } from 'vue-i18n';
 import draggable from 'vuedraggable';
 import TaskCard from './TaskCard.vue';
 

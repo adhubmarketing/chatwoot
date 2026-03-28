@@ -3,18 +3,18 @@
 # Table name: kanban_boards
 #
 #  id          :bigint           not null, primary key
-#  account_id  :bigint           not null
-#  name        :string           not null
 #  description :text
-#  settings    :jsonb            default({})
-#  steps_order :integer          array, default([])
+#  name        :string           not null
+#  settings    :jsonb
+#  steps_order :integer          default([]), is an Array
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  account_id  :bigint           not null
 #
 # Indexes
 #
 #  index_kanban_boards_on_account_id           (account_id)
-#  index_kanban_boards_on_account_id_and_name  (account_id, name) UNIQUE
+#  index_kanban_boards_on_account_id_and_name  (account_id,name) UNIQUE
 #
 class Kanban::Board < ApplicationRecord
   self.table_name = 'kanban_boards'

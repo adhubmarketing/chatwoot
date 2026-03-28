@@ -3,15 +3,21 @@
 # Table name: kanban_account_user_preferences
 #
 #  id          :bigint           not null, primary key
-#  account_id  :bigint           not null
-#  user_id     :bigint           not null
-#  preferences :jsonb            default({})
+#  preferences :jsonb
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  account_id  :bigint           not null
+#  user_id     :bigint           not null
 #
 # Indexes
 #
-#  index_kanban_prefs_on_account_and_user (account_id, user_id) UNIQUE
+#  index_kanban_account_user_preferences_on_account_id  (account_id)
+#  index_kanban_account_user_preferences_on_user_id     (user_id)
+#  index_kanban_prefs_on_account_and_user               (account_id,user_id) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (user_id => users.id)
 #
 class Kanban::AccountUserPreference < ApplicationRecord
   self.table_name = 'kanban_account_user_preferences'
