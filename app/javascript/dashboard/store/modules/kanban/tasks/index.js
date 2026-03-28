@@ -55,7 +55,10 @@ const actions = {
   create: async ({ commit }, { taskData, insertBeforeTaskId }) => {
     commit('SET_UI_FLAG', { isCreating: true });
     try {
-      const response = await KanbanTasksAPI.create(taskData, insertBeforeTaskId);
+      const response = await KanbanTasksAPI.create(
+        taskData,
+        insertBeforeTaskId
+      );
       commit('SET_TASK', response.data);
       commit('SET_UI_FLAG', { isCreating: false });
       return response.data;
@@ -108,12 +111,8 @@ const actions = {
   },
 
   getAuditEvents: async (context, { taskId, page }) => {
-    try {
-      const response = await KanbanTasksAPI.getAuditEvents(taskId, page);
-      return response.data.payload;
-    } catch (error) {
-      throw error;
-    }
+    const response = await KanbanTasksAPI.getAuditEvents(taskId, page);
+    return response.data.payload;
   },
 };
 

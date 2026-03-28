@@ -87,11 +87,7 @@ const actions = {
   },
 
   reorderSteps: async (context, { boardId, stepsOrder }) => {
-    try {
-      await KanbanStepsAPI.reorderSteps(boardId, stepsOrder);
-    } catch (error) {
-      throw error;
-    }
+    await KanbanStepsAPI.reorderSteps(boardId, stepsOrder);
   },
 };
 

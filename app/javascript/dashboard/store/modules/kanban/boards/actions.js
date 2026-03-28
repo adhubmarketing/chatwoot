@@ -69,15 +69,14 @@ export const actions = {
   },
 
   toggleFavorite: async ({ commit }, boardId) => {
-    try {
-      const response = await KanbanBoardsAPI.toggleFavorite(boardId);
-      // Reload preferences after toggling
-      const allResponse = await KanbanBoardsAPI.get();
-      commit(types.SET_KANBAN_PREFERENCES, allResponse.data.payload.preferences);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await KanbanBoardsAPI.toggleFavorite(boardId);
+    // Reload preferences after toggling
+    const allResponse = await KanbanBoardsAPI.get();
+    commit(
+      types.SET_KANBAN_PREFERENCES,
+      allResponse.data.payload.preferences
+    );
+    return response.data;
   },
 
   updateAgents: async ({ commit }, { boardId, agentIds }) => {
@@ -107,11 +106,7 @@ export const actions = {
   },
 
   getConversations: async (context, { boardId, filters }) => {
-    try {
-      const response = await KanbanBoardsAPI.getConversations(boardId, filters);
-      return response.data.payload;
-    } catch (error) {
-      throw error;
-    }
+    const response = await KanbanBoardsAPI.getConversations(boardId, filters);
+    return response.data.payload;
   },
 };
