@@ -90,4 +90,8 @@ class Api::V1::Accounts::Kanban::BoardsController < Api::V1::Accounts::BaseContr
   def board_params
     params.require(:board).permit(:name, :description, settings: {})
   end
+
+  def check_authorization
+    authorize(@board || Kanban::Board)
+  end
 end

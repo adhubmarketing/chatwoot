@@ -19,4 +19,8 @@ class Api::V1::Accounts::Kanban::PreferencesController < Api::V1::Accounts::Base
   def preferences_params
     params.require(:preferences).permit!
   end
+
+  def check_authorization
+    authorize(@preferences || Kanban::AccountUserPreference)
+  end
 end

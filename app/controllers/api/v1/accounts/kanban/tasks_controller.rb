@@ -138,4 +138,8 @@ class Api::V1::Accounts::Kanban::TasksController < Api::V1::Accounts::BaseContro
       label_list: []
     )
   end
+
+  def check_authorization
+    authorize(@task || Kanban::Task)
+  end
 end

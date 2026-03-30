@@ -64,4 +64,8 @@ class Api::V1::Accounts::Kanban::StepsController < Api::V1::Accounts::BaseContro
   def step_params
     params.require(:step).permit(:name, :description, :color, :cancelled)
   end
+
+  def check_authorization
+    authorize(@step || Kanban::BoardStep)
+  end
 end

@@ -1,197 +1,142 @@
 <script setup>
-import { ref } from 'vue';
-import { useStore } from 'vuex';
+import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useAlert } from 'dashboard/composables';
+import Dialog from 'dashboard/components-next/dialog/Dialog.vue';
+import Button from 'dashboard/components-next/button/Button.vue';
 
-const emit = defineEmits(['close', 'created']);
+const props = defineProps({
+  selectedTemplate: {
+    type: String,
+    default: 'empty',
+  },
+});
 
-const store = useStore();
+const emit = defineEmits(['close', 'create', 'back']);
 const { t } = useI18n();
 
-const name = ref('');
-const description = ref('');
-const selectedTemplate = ref('empty');
-const isSubmitting = ref(false);
+const dialogRef = ref(null);
+const boardName = ref('');
+const boardDescription = ref('');
+const isCreating = ref(false);
 
-const templates = [
-  {
-    id: 'empty',
-    name: t('KANBAN.TEMPLATES.EMPTY'),
-    description: t('KANBAN.TEMPLATES.EMPTY_DESCRIPTION'),
-    icon: 'view-column',
-  },
-  {
-    id: 'sales',
-    name: t('KANBAN.TEMPLATES.SALES'),
-    description: t('KANBAN.TEMPLATES.SALES_DESCRIPTION'),
-    icon: 'currency-dollar',
-  },
-  {
-    id: 'support',
-    name: t('KANBAN.TEMPLATES.SUPPORT'),
-    description: t('KANBAN.TEMPLATES.SUPPORT_DESCRIPTION'),
-    icon: 'headset',
-  },
-  {
-    id: 'recruitment',
-    name: t('KANBAN.TEMPLATES.RECRUITMENT'),
-    description: t('KANBAN.TEMPLATES.RECRUITMENT_DESCRIPTION'),
-    icon: 'people',
-  },
-];
+const maxDescriptionLength = 120;
+const descriptionLength = computed(() => boardDescription.value.length);
 
-const handleSubmit = async () => {
-  if (!name.value.trim()) {
-    useAlert(t('KANBAN.BOARD_NAME') + ' is required');
-    return;
-  }
+const canCreate = computed(() => {
+  return boardName.value.trim().length > 0 && !isCreating.value;
+});
 
-  isSubmitting.value = true;
-
-  try {
-    const boardData = {
-      name: name.value.trim(),
-      description: description.value.trim(),
-      settings: {},
-    };
-
-    const board = await store.dispatch('kanbanBoards/create', boardData);
-
-    // Create steps based on template
-    if (selectedTemplate.value !== 'empty') {
-      await createTemplateSteps(board.id);
-    }
-
-    useAlert(t('KANBAN.MESSAGES.BOARD_CREATED'));
-    emit('created', board);
-  } catch (error) {
-    console.error('Failed to create board:', error);
-    useAlert(t('KANBAN.MESSAGES.ERROR'));
-  } finally {
-    isSubmitting.value = false;
-  }
+const resetForm = () => {
+  boardName.value = '';
+  boardDescription.value = '';
 };
 
-const createTemplateSteps = async (boardId) => {
-  const stepTemplates = {
-    sales: [
-      { name: 'Lead', color: '#6B7280' },
-      { name: 'Qualified', color: '#3B82F6' },
-      { name: 'Proposal', color: '#F59E0B' },
-      { name: 'Negotiation', color: '#8B5CF6' },
-      { name: 'Won', color: '#10B981' },
-      { name: 'Lost', color: '#EF4444', cancelled: true },
-    ],
-    support: [
-      { name: 'New', color: '#6B7280' },
-      { name: 'In Progress', color: '#3B82F6' },
-      { name: 'Waiting', color: '#F59E0B' },
-      { name: 'Resolved', color: '#10B981' },
-    ],
-    recruitment: [
-      { name: 'Applied', color: '#6B7280' },
-      { name: 'Screening', color: '#3B82F6' },
-      { name: 'Interview', color: '#8B5CF6' },
-      { name: 'Offer', color: '#F59E0B' },
-      { name: 'Hired', color: '#10B981' },
-      { name: 'Rejected', color: '#EF4444', cancelled: true },
-    ],
-  };
-
-  const steps = stepTemplates[selectedTemplate.value] || [];
-
-  for (const step of steps) {
-    await store.dispatch('kanbanSteps/create', {
-      boardId,
-      stepData: step,
-    });
-  }
+const open = () => {
+  resetForm();
+  dialogRef.value?.open();
 };
 
-const handleClose = () => {
+const close = () => {
+  dialogRef.value?.close();
   emit('close');
 };
+
+const handleCreate = async () => {
+  if (!canCreate.value) return;
+
+  isCreating.value = true;
+
+  try {
+    emit('create', {
+      name: boardName.value,
+      description: boardDescription.value,
+      template: props.selectedTemplate,
+    });
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Error creating board:', error);
+  } finally {
+    isCreating.value = false;
+  }
+};
+
+const handleBack = () => {
+  close();
+  emit('back');
+};
+
+defineExpose({ open, close });
 </script>
 
 <template>
-  <woot-modal :show.sync="true" :on-close="handleClose">
-    <div class="flex flex-col w-full max-w-2xl p-6">
-      <h3 class="mb-6 text-xl font-semibold text-slate-900 dark:text-slate-25">
-        {{ t('KANBAN.CREATE_BOARD') }}
-      </h3>
+  <Dialog
+    ref="dialogRef"
+    type="edit"
+    :title="t('KANBAN.CREATE_BOARD')"
+    :show-confirm-button="false"
+    :show-cancel-button="false"
+    width="lg"
+    @close="close"
+  >
+    <div class="space-y-4">
+      <!-- Name Field -->
+      <div>
+        <label class="block text-sm font-medium text-n-slate-12 mb-2">
+          {{ t('KANBAN.BOARD_NAME') }}
+        </label>
+        <input
+          v-model="boardName"
+          type="text"
+          :placeholder="t('KANBAN.BOARD_NAME')"
+          class="w-full px-3 py-2 rounded-lg bg-n-alpha-black2 text-n-slate-12 placeholder-n-slate-9 outline outline-1 outline-n-weak focus:outline-n-brand"
+        />
+      </div>
 
-      <form @submit.prevent="handleSubmit">
-        <!-- Board Name -->
-        <div class="mb-4">
-          <label class="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
-            {{ t('KANBAN.BOARD_NAME') }}
-          </label>
-          <input
-            v-model="name"
-            type="text"
-            class="w-full px-3 py-2 border rounded-lg border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-woot-500"
-            :placeholder="t('KANBAN.BOARD_NAME')"
-            required
-          />
-        </div>
-
-        <!-- Board Description -->
-        <div class="mb-6">
-          <label class="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
-            {{ t('KANBAN.BOARD_DESCRIPTION') }}
-          </label>
+      <!-- Description Field -->
+      <div>
+        <label class="block text-sm font-medium text-n-slate-12 mb-2">
+          {{ t('KANBAN.BOARD_DESCRIPTION') }}
+        </label>
+        <div class="relative">
           <textarea
-            v-model="description"
-            rows="3"
-            class="w-full px-3 py-2 border rounded-lg border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-woot-500"
+            v-model="boardDescription"
             :placeholder="t('KANBAN.BOARD_DESCRIPTION')"
+            rows="4"
+            :maxlength="maxDescriptionLength"
+            class="w-full px-3 py-2 pb-8 rounded-lg bg-n-alpha-black2 text-n-slate-12 placeholder-n-slate-9 outline outline-1 outline-n-weak focus:outline-n-brand resize-none"
           />
-        </div>
-
-        <!-- Template Selection -->
-        <div class="mb-6">
-          <label class="block mb-3 text-sm font-medium text-slate-700 dark:text-slate-300">
-            {{ t('KANBAN.TEMPLATES.TITLE') }}
-          </label>
-          <div class="grid grid-cols-2 gap-3">
-            <div
-              v-for="template in templates"
-              :key="template.id"
-              class="p-4 transition-all border-2 rounded-lg cursor-pointer"
-              :class="
-                selectedTemplate === template.id
-                  ? 'border-woot-500 bg-woot-50 dark:bg-woot-900'
-                  : 'border-slate-200 dark:border-slate-700 hover:border-slate-300'
-              "
-              @click="selectedTemplate = template.id"
-            >
-              <fluent-icon :icon="template.icon" size="24" class="mb-2 text-woot-500" />
-              <h4 class="mb-1 text-sm font-semibold text-slate-900 dark:text-slate-25">
-                {{ template.name }}
-              </h4>
-              <p class="text-xs text-slate-600 dark:text-slate-400">
-                {{ template.description }}
-              </p>
-            </div>
+          <div class="absolute bottom-2 right-2 text-xs text-n-slate-9">
+            {{ descriptionLength }} / {{ maxDescriptionLength }}
           </div>
         </div>
-
-        <!-- Actions -->
-        <div class="flex justify-end gap-2">
-          <woot-button variant="clear" @click="handleClose">
-            {{ t('GENERAL_SETTINGS.CANCEL') }}
-          </woot-button>
-          <woot-button
-            type="submit"
-            color-scheme="primary"
-            :is-loading="isSubmitting"
-            :disabled="!name.trim()"
-          >
-            {{ t('KANBAN.CREATE_BOARD') }}
-          </woot-button>
-        </div>
-      </form>
+      </div>
     </div>
-  </woot-modal>
+
+    <template #footer>
+      <div class="flex items-center justify-between w-full gap-3">
+        <Button
+          icon="i-lucide-arrow-left"
+          label="Voltar"
+          variant="ghost"
+          color="slate"
+          @click="handleBack"
+        />
+        <div class="flex gap-2">
+          <Button
+            label="Cancelar"
+            variant="faded"
+            color="slate"
+            @click="close"
+          />
+          <Button
+            :label="isCreating ? 'Criando...' : 'Criar'"
+            color="blue"
+            :disabled="!canCreate"
+            :is-loading="isCreating"
+            @click="handleCreate"
+          />
+        </div>
+      </div>
+    </template>
+  </Dialog>
 </template>

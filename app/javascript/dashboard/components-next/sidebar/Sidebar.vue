@@ -171,7 +171,9 @@ onMounted(() => {
   store.dispatch('inboxes/get');
   store.dispatch('notifications/unReadCount');
   store.dispatch('teams/get');
-  store.dispatch('kanbanBoards/getAll');
+  store.dispatch('kanbanBoards/getAll').catch(() => {
+    // Silently fail if Kanban boards can't be loaded
+  });
   store.dispatch('attributes/get');
   store.dispatch('customViews/get', 'conversation');
   store.dispatch('customViews/get', 'contact');
@@ -390,17 +392,23 @@ const menuItems = computed(() => {
     },
     {
       name: 'Kanban',
-      label: t('KANBAN.HEADER'),
+      label: 'Kanban',
       icon: 'i-lucide-kanban-square',
       activeOn: ['kanban_overview', 'kanban_board_view'],
       children: [
         {
-          name: 'Overview',
-          label: t('KANBAN.OVERVIEW'),
+          name: 'Visão geral',
+          label: 'Visão geral',
           activeOn: ['kanban_overview'],
           to: accountScopedRoute('kanban_overview'),
         },
-        ...kanbanBoards.value.map(board => ({
+        {
+          name: 'Funis',
+          label: 'Funis',
+          activeOn: ['kanban_overview'],
+          to: accountScopedRoute('kanban_overview'),
+        },
+        ...(kanbanBoards.value || []).map(board => ({
           name: `${board.name}-${board.id}`,
           label: board.name,
           to: accountScopedRoute('kanban_board_view', { boardId: board.id }),
