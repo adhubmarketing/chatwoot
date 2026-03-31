@@ -114,6 +114,41 @@ lint-js: ## Run ESLint
 
 ##@ Production Docker Image
 
+# GitHub Container Registry settings
+GHCR_USERNAME = adhubmarketing
+GHCR_IMAGE = ghcr.io/$(GHCR_USERNAME)/chatwoot
+GHCR_TAG = develop-ce
+
+build-ghcr-amd64: ## Build and push AMD64 image to GitHub Container Registry
+	@echo "🏗️  Building AMD64 image for GHCR..."
+	@echo "📦 Image: $(GHCR_IMAGE):$(GHCR_TAG)"
+	@docker buildx create --name multiarch --use 2>/dev/null || docker buildx use multiarch
+	@docker buildx build \
+		--platform linux/amd64 \
+		-t $(GHCR_IMAGE):$(GHCR_TAG) \
+		-f docker/Dockerfile \
+		--push \
+		.
+	@echo "✅ Image built and pushed: $(GHCR_IMAGE):$(GHCR_TAG)"
+	@echo ""
+	@echo "💡 Pull on your VPS with:"
+	@echo "   docker pull $(GHCR_IMAGE):$(GHCR_TAG)"
+
+build-ghcr-multi: ## Build and push multi-arch (AMD64+ARM64) image to GHCR
+	@echo "🏗️  Building multi-arch image for GHCR..."
+	@echo "📦 Image: $(GHCR_IMAGE):$(GHCR_TAG)"
+	@docker buildx create --name multiarch --use 2>/dev/null || docker buildx use multiarch
+	@docker buildx build \
+		--platform linux/amd64,linux/arm64 \
+		-t $(GHCR_IMAGE):$(GHCR_TAG) \
+		-f docker/Dockerfile \
+		--push \
+		.
+	@echo "✅ Multi-arch image built and pushed: $(GHCR_IMAGE):$(GHCR_TAG)"
+	@echo ""
+	@echo "💡 Pull on your VPS with:"
+	@echo "   docker pull $(GHCR_IMAGE):$(GHCR_TAG)"
+
 build-image: ## Build production Docker image for Portainer
 	@echo "🏗️  Building production Docker image..."
 	@docker build \

@@ -44,6 +44,19 @@ if (isLibraryMode) {
 
 export default defineConfig({
   plugins: plugins,
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler',
+        includePaths: [
+          path.resolve(__dirname, './app/javascript/widget/assets/scss'),
+          path.resolve(__dirname, './app/javascript/shared/assets'),
+          path.resolve(__dirname, './app/javascript/portal/assets'),
+          path.resolve(__dirname, './app/javascript/dashboard/assets'),
+        ],
+      },
+    },
+  },
   build: {
     rollupOptions: {
       output: {
