@@ -29,6 +29,17 @@ class InstallationConfig < ApplicationRecord
   def value
     # Compatibilidade durante migração YAML -> JSONB
     val = serialized_value
+
+    # Se for string YAML, fazer parse
+    if val.is_a?(String) && val.start_with?('---')
+      begin
+        parsed = YAML.safe_load(val, permitted_classes: [ActiveSupport::HashWithIndifferentAccess, Symbol], aliases: true)
+        return parsed.is_a?(Hash) ? (parsed['value'] || parsed[:value]) : parsed
+      rescue StandardError
+        return val
+      end
+    end
+
     case val
     when Hash
       val['value'] || val[:value]
