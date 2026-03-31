@@ -140,9 +140,9 @@ export default {
       <PaymentPendingBanner v-if="hideOnOnboardingView" />
     </template>
     <router-view v-slot="{ Component }">
-      <keep-alive>
-        <component :is="Component" :key="$route.fullPath" />
-      </keep-alive>
+      <transition name="fade" mode="out-in">
+        <component :is="Component" />
+      </transition>
     </router-view>
     <WootSnackbarBox />
     <NetworkNotification />
