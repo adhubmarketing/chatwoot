@@ -15,12 +15,6 @@
 #  index_installation_configs_on_name_and_created_at  (name,created_at) UNIQUE
 #
 class InstallationConfig < ApplicationRecord
-  # https://stackoverflow.com/questions/72970170/upgrading-to-rails-6-1-6-1-causes-psychdisallowedclass-tried-to-load-unspecif
-  # https://discuss.rubyonrails.org/t/cve-2022-32224-possible-rce-escalation-bug-with-serialized-columns-in-active-record/81017
-  # FIX ME : fixes breakage of installation config. we need to migrate.
-  # Fix configuration in application.rb
-  serialize :serialized_value, coder: YAML, type: ActiveSupport::HashWithIndifferentAccess, default: {}.with_indifferent_access
-
   before_validation :set_lock
   validates :name, presence: true
   validate :saml_sso_users_check, if: -> { name == 'ENABLE_SAML_SSO_LOGIN' }
@@ -33,7 +27,14 @@ class InstallationConfig < ApplicationRecord
   after_commit :clear_cache
 
   def value
-    serialized_value[:value]
+    # Compatibilidade durante migração YAML -> JSONB
+    val = serialized_value
+    case val
+    when Hash
+      val['value'] || val[:value]
+    else
+      val
+    end
   end
 
   def value=(value_to_assigned)
