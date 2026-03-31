@@ -31,9 +31,7 @@ class InstallationConfig < ApplicationRecord
     val = serialized_value
 
     # Extrair valor de Hash JSONB primeiro
-    if val.is_a?(Hash)
-      val = val['value'] || val[:value]
-    end
+    val = val['value'] || val[:value] if val.is_a?(Hash)
 
     # Se o resultado for string YAML, fazer parse
     if val.is_a?(String) && val.start_with?('---')
@@ -41,8 +39,9 @@ class InstallationConfig < ApplicationRecord
         parsed = YAML.safe_load(val, permitted_classes: [ActiveSupport::HashWithIndifferentAccess, Symbol], aliases: true)
         # Se parseou para um Hash com chave 'value', extrair recursivamente
         val = parsed.is_a?(Hash) ? (parsed['value'] || parsed[:value] || parsed) : parsed
-      rescue StandardError
+      rescue StandardError => e
         # Se falhar o parse, retorna a string original
+        Rails.logger.warn("Failed to parse YAML for #{name}: #{e.message}")
       end
     end
 
