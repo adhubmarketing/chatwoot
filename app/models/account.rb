@@ -120,6 +120,9 @@ class Account < ApplicationRecord
   has_many :tiktok_channels, dependent: :destroy_async, class_name: '::Channel::Tiktok'
   has_many :hooks, dependent: :destroy_async, class_name: 'Integrations::Hook'
   has_many :inboxes, dependent: :destroy_async
+  has_many :kanban_boards, dependent: :destroy_async, class_name: 'Kanban::Board'
+  has_many :kanban_board_steps, dependent: :destroy_async, class_name: 'Kanban::BoardStep'
+  has_many :kanban_tasks, dependent: :destroy_async, class_name: 'Kanban::Task'
   has_many :labels, dependent: :destroy_async
   has_many :line_channels, dependent: :destroy_async, class_name: '::Channel::Line'
   has_many :mentions, dependent: :destroy_async

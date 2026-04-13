@@ -260,6 +260,33 @@ Rails.application.routes.draw do
             end
           end
 
+          # Kanban Routes
+          namespace :kanban do
+            resources :boards do
+              member do
+                post :toggle_favorite
+                post :update_agents
+                post :update_inboxes
+                get :conversations
+              end
+              resources :steps, only: [:index, :create] do
+                collection do
+                  patch :reorder
+                end
+              end
+            end
+
+            resources :steps, only: [:show, :update, :destroy]
+            resources :tasks do
+              member do
+                post :move
+                get :audit_events
+              end
+            end
+
+            resource :preferences, only: [:update]
+          end
+
           # Assignment V2 Routes
           resources :assignment_policies do
             resources :inboxes, only: [:index, :create, :destroy], module: :assignment_policies

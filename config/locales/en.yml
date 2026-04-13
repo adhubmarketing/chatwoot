@@ -77,6 +77,20 @@ en:
         failed: File is blank
       export:
         success: We will notify you once contacts export file is ready to view.
+    kanban:
+      board:
+        not_found: Board not found
+        invalid_name: Board name is invalid
+        duplicate_name: A board with this name already exists
+      step:
+        not_found: Step not found
+        invalid_color: Color must be a valid hex code (e.g., #1f93ff)
+        duplicate_name: A step with this name already exists in this board
+      task:
+        not_found: Task not found
+        invalid_title: Task title is required
+        description_too_long: Description cannot exceed 5000 characters
+        invalid_position: Invalid task position
       email:
         invalid: Invalid email
       phone_number:

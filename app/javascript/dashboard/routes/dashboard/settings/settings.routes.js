@@ -21,6 +21,7 @@ import reports from './reports/reports.routes';
 import store from '../../../store';
 import sla from './sla/sla.routes';
 import teams from './teams/teams.routes';
+import kanban from './kanban/kanban.routes';
 import customRoles from './customRoles/customRole.routes';
 import profile from './profile/profile.routes';
 import security from './security/security.routes';
@@ -62,6 +63,7 @@ export default {
     ...reports.routes,
     ...sla.routes,
     ...teams.routes,
+    ...kanban.routes,
     ...customRoles.routes,
     ...profile.routes,
     ...security.routes,

@@ -46,6 +46,10 @@ import slaReports from './modules/SLAReports';
 import summaryReports from './modules/summaryReports';
 import teamMembers from './modules/teamMembers';
 import teams from './modules/teams';
+import kanbanBoards from './modules/kanban/boards';
+import kanbanSteps from './modules/kanban/steps';
+import kanbanTasks from './modules/kanban/tasks';
+import kanbanPreferences from './modules/kanban/preferences';
 import userNotificationSettings from './modules/userNotificationSettings';
 import webhooks from './modules/webhooks';
 import captainAssistants from './captain/assistant';
@@ -109,6 +113,10 @@ export default createStore({
     summaryReports,
     teamMembers,
     teams,
+    kanbanBoards,
+    kanbanSteps,
+    kanbanTasks,
+    kanbanPreferences,
     userNotificationSettings,
     webhooks,
     captainAssistants,
